@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /php-forum-app/src/
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /php-forum-app/src/index.php [L]
