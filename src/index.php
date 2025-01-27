@@ -3,7 +3,7 @@ require_once 'config/database.php';
 require_once 'includes/header.php';
 
 // Fetch posts from the database
-$query = "SELECT * FROM posts ORDER BY created_at DESC";
+$query = "SELECT posts.*, users.username FROM posts JOIN users ON posts.user_id = users.id ORDER BY posts.created_at DESC";
 $result = $pdo->query($query);
 ?>
 
@@ -17,7 +17,7 @@ $result = $pdo->query($query);
             <div class="post">
                 <h3><?php echo htmlspecialchars($post['title']); ?></h3>
                 <p><?php echo nl2br(htmlspecialchars($post['content'])); ?></p>
-                <small>Posted on <?php echo $post['created_at']; ?></small>
+                <small>Posted by <?php echo htmlspecialchars($post['username']); ?> on <?php echo $post['created_at']; ?></small>
             </div>
         <?php endwhile; ?>
     </div>
