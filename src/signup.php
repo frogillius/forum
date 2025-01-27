@@ -1,32 +1,17 @@
 <?php
-require_once 'config/database.php';
+require 'config/database.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST["username"]);
-    $password = trim($_POST["password"]);
-    $confirm_password = trim($_POST["confirm_password"]);
-    $email = trim($_POST["email"]);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = $_POST['username'];
+    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
-    if (empty($username) || empty($password) || empty($confirm_password) || empty($email)) {
-        echo "Please fill all fields.";
-    } elseif ($password !== $confirm_password) {
-        echo "Passwords do not match.";
+    $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+    if ($stmt->execute([$username, $password])) {
+        echo "Signup successful!";
     } else {
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
-        $sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
-        if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("sss", $username, $password_hash, $email);
-            if ($stmt->execute()) {
-                echo "Registration successful.";
-            } else {
-                echo "Something went wrong. Please try again.";
-            }
-            $stmt->close();
-        }
+        echo "Signup failed!";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -34,21 +19,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Signup</title>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
     <h2>Sign Up</h2>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+    <form method="POST" action="signup.php">
         <label for="username">Username:</label>
-        <input type="text" name="username" required>
+        <input type="text" id="username" name="username" required>
+        <br>
         <label for="email">Email:</label>
         <input type="email" name="email" required>
+        <br>
         <label for="password">Password:</label>
-        <input type="password" name="password" required>
+        <input type="password" id="password" name="password" required>
+        <br>
         <label for="confirm_password">Confirm Password:</label>
         <input type="password" name="confirm_password" required>
-        <input type="submit" value="Sign Up">
+        <br>
+        <button type="submit">Signup</button>
     </form>
 </body>
 </html>
