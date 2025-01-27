@@ -2,7 +2,7 @@
 $host = 'localhost'; // MySQL server host
 $dbname = 'forum_db'; // Database name
 $username = 'root'; // Database username
-$password = ''; // Database password
+$password = trim(file_get_contents('/home/forum/pass.txt')); // Database password
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
