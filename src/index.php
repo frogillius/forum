@@ -4,7 +4,7 @@ require_once 'includes/header.php';
 
 // Fetch posts from the database
 $query = "SELECT * FROM posts ORDER BY created_at DESC";
-$result = $conn->query($query);
+$result = $pdo->query($query);
 ?>
 
 <div class="container">
@@ -13,7 +13,7 @@ $result = $conn->query($query);
     
     <h2>Forum Posts</h2>
     <div class="posts">
-        <?php while ($post = $result->fetch_assoc()): ?>
+        <?php while ($post = $result->fetch(PDO::FETCH_ASSOC)): ?>
             <div class="post">
                 <h3><?php echo htmlspecialchars($post['title']); ?></h3>
                 <p><?php echo nl2br(htmlspecialchars($post['content'])); ?></p>
