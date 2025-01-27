@@ -3,6 +3,18 @@ session_start();
 require_once 'config/database.php';
 require_once 'includes/functions.php';
 
+// Create posts table if it doesn't exist
+$createPostsTable = "
+CREATE TABLE IF NOT EXISTS posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    user_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+)";
+$pdo->exec($createPostsTable);
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = trim($_POST['title']);
     $content = trim($_POST['content']);
